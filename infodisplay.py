@@ -2,17 +2,12 @@
 # Author: Frederick Vandenbosch
 
 import time
-
-#import Adafruit_GPIO.SPI as SPI
 import Adafruit_SSD1306
-
+import RPi.GPIO as GPIO
 import Image
 import ImageFont
 import ImageDraw
-
-def display_network():
-
-	return 0
+import os
 
 def display_time():
 	# Collect current time and date
@@ -22,15 +17,19 @@ def display_time():
 	# Clear image buffer by drawing a black filled box
 	draw.rectangle((0,0,width,height), outline=0, fill=0)
 
-	# Position time
-	x_pos = (disp.width/2)-(string_width(current_time)/2)
-	y_pos = 2
+        font = ImageFont.truetype('Minecraftia.ttf', 35)
 
+	# Position time
+	x_pos = (disp.width/2)-(string_width(font,current_time)/2)
+	y_pos = 2 + (disp.height-4-10)/2 - 18
+        
 	# Draw time
 	draw.text((x_pos, y_pos), current_time, font=font, fill=255)
 
+        font = ImageFont.truetype('Minecraftia.ttf', 8)
+
 	# Position date
-	x_pos = (disp.width/2)-(string_width(current_date)/2)
+	x_pos = (disp.width/2)-(string_width(font,current_date)/2)
 	y_pos = disp.height-10
 
 	# Draw date
@@ -48,6 +47,8 @@ def display_socialmedia():
 	# Clear image buffer by drawing a black filled box
 	draw.rectangle((0,0,width,height), outline=0, fill=0)
 
+	font = ImageFont.truetype('Minecraftia.ttf', 8)
+
 	for i in range(0, 4):
 		# Position time
 		x_pos = 2
@@ -57,7 +58,7 @@ def display_socialmedia():
 		draw.text((x_pos, y_pos), channels[i], font=font, fill=255)
 
 		# Position date
-		x_pos = disp.width - 2 - string_width(subscribers[i])
+		x_pos = disp.width - 2 - string_width(font, subscribers[i])
 		y_pos = 2 + (((disp.height-4)/5)*i)
 
 		# Draw date
@@ -67,14 +68,21 @@ def display_socialmedia():
 	disp.image(image)
 	disp.display()
 
-def string_width(string):
+def display_network():
+	ipaddress = system.popen("ifconfig wlan0 | grep 'inet addr' | awk -F: '{print $2}' | awk '{print $1}'").read()
+
+def string_width(fontType,string):
 	string_width = 0
 
 	for i, c in enumerate(string):
-		char_width, char_height = draw.textsize(c, font=font)
+		char_width, char_height = draw.textsize(c, font=fontType)
 		string_width += char_width
 
 	return string_width
+
+GPIO.setmode(GPIO.BCM)	
+GPIO.setup(12, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(16, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 	
 # 128x64 display with hardware I2C
 disp = Adafruit_SSD1306.SSD1306_128_64(rst=24)
@@ -100,9 +108,18 @@ font = ImageFont.load_default()
 # Create drawing object
 draw = ImageDraw.Draw(image)
 
+prev_millis = 0
 
 while True:
-	# Read buttons
-
-	# Pause briefly before drawing next frame
-	time.sleep(0.1)
+	millis = int(round(time.time() * 1000))
+	if((millis - prev_millis) > 500):
+		if (not GPIO.input(12)):
+			display_time()
+			prev_millis = int(round(time.time() * 1000))
+		elif (not GPIO.input(16)):
+			#disp.clear()
+			#disp.display()
+			display_socialmedia()
+			prev_millis = int(round(time.time() * 1000))
+		else:
+			time.sleep(0.1)
