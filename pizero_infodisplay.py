@@ -7,38 +7,8 @@ import time
 import Adafruit_SSD1306
 
 import Image
-
-
-# 128x64 display with hardware I2C
-disp = Adafruit_SSD1306.SSD1306_128_64(rst=24)
-
-# Initialize library
-disp.begin()
-
-# Get display width and height
-width = disp.width
-height = disp.height
-
-# Clear display
-disp.clear()
-disp.display()
-
-# Create image buffer
-# Make sure to create image with mode '1' for 1-bit color
-image = Image.new('1', (width, height))
-
-# Load default font
-font = ImageFont.load_default()
-
-# Create drawing object
-draw = ImageDraw.Draw(image)
-
-
-while True:
-	# Read buttons
-
-	# Pause briefly before drawing next frame
-	time.sleep(0.1)
+import ImageFont
+import ImageDraw
 
 def display_network():
 
@@ -105,3 +75,34 @@ def string_width(string):
 		string_width += char_width
 
 	return string_width
+	
+# 128x64 display with hardware I2C
+disp = Adafruit_SSD1306.SSD1306_128_64(rst=24)
+
+# Initialize library
+disp.begin()
+
+# Get display width and height
+width = disp.width
+height = disp.height
+
+# Clear display
+disp.clear()
+disp.display()
+
+# Create image buffer
+# Make sure to create image with mode '1' for 1-bit color
+image = Image.new('1', (width, height))
+
+# Load default font
+font = ImageFont.load_default()
+
+# Create drawing object
+draw = ImageDraw.Draw(image)
+
+
+while True:
+	# Read buttons
+
+	# Pause briefly before drawing next frame
+	time.sleep(0.1)
