@@ -119,7 +119,14 @@ while True:
 			if(display > 2):
 				display = 0
 			prev_millis = int(round(time.time() * 1000))
+			
 		elif (not GPIO.input(16)):
+			if(display == 0):
+				# do something
+			elif(display == 1):
+				# do something
+			elif(display == 2):
+				# do something
 			prev_millis = int(round(time.time() * 1000))
 	
 	if(display == 0):
@@ -128,7 +135,5 @@ while True:
 		display_network()
 	elif(display == 2):
 		display_social()
-	else:
-		display_time()
 		
 	time.sleep(0.1)
