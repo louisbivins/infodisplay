@@ -17,6 +17,7 @@ def display_time():
 	# Clear image buffer by drawing a black filled box
 	draw.rectangle((0,0,width,height), outline=0, fill=0)
 
+	# Set font type and size
         font = ImageFont.truetype('Minecraftia.ttf', 35)
 
 	# Position time
@@ -26,6 +27,7 @@ def display_time():
 	# Draw time
 	draw.text((x_pos, y_pos), current_time, font=font, fill=255)
 
+	# Set font type and size
         font = ImageFont.truetype('Minecraftia.ttf', 8)
 
 	# Position date
@@ -47,6 +49,7 @@ def display_socialmedia():
 	# Clear image buffer by drawing a black filled box
 	draw.rectangle((0,0,width,height), outline=0, fill=0)
 
+	# Set font type and size
 	font = ImageFont.truetype('Minecraftia.ttf', 8)
 
 	for i in range(0, 4):
