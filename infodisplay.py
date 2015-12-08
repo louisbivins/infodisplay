@@ -109,17 +109,26 @@ font = ImageFont.load_default()
 draw = ImageDraw.Draw(image)
 
 prev_millis = 0
+display = 0
 
 while True:
 	millis = int(round(time.time() * 1000))
 	if((millis - prev_millis) > 500):
 		if (not GPIO.input(12)):
-			display_time()
+			display++
+			if(display > 2):
+				display = 0
 			prev_millis = int(round(time.time() * 1000))
 		elif (not GPIO.input(16)):
-			#disp.clear()
-			#disp.display()
-			display_socialmedia()
 			prev_millis = int(round(time.time() * 1000))
-		else:
-			time.sleep(0.1)
+	
+	if(display == 0):
+		display_time()
+	elif(display == 1):
+		display_network()
+	elif(display == 2):
+		display_social()
+	else:
+		display_time()
+		
+	time.sleep(0.1)
