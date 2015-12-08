@@ -21,7 +21,7 @@ def display_time():
 
 	# Position time
 	x_pos = (disp.width/2)-(string_width(font,current_time)/2)
-	y_pos = 2 + (disp.height-4-10)/2 - 18
+	y_pos = 2 + (disp.height-4-8)/2 - 35
         
 	# Draw time
 	draw.text((x_pos, y_pos), current_time, font=font, fill=255)
