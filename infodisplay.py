@@ -73,6 +73,48 @@ def display_socialmedia():
 
 def display_network():
 	ipaddress = system.popen("ifconfig wlan0 | grep 'inet addr' | awk -F: '{print $2}' | awk '{print $1}'").read()
+	netmask = system.popen("ifconfig wlan0 | grep 'inet addr' | awk -F: '{print $2}' | awk '{print $1}'").read()
+	gateway = system.popen("ifconfig wlan0 | grep 'inet addr' | awk -F: '{print $2}' | awk '{print $1}'").read()
+	ssid = system.popen("iwconfig wlan0 | grep 'ESSID'").read()
+
+	# Clear image buffer by drawing a black filled box
+	draw.rectangle((0,0,width,height), outline=0, fill=0)
+
+	# Set font type and size
+        font = ImageFont.truetype('Minecraftia.ttf', 12)
+        
+        # Position date
+        x_pos = 2
+	y_pos = 2
+
+	# Draw date
+	draw.text((x_pos, y_pos), ssid, font=font, fill=255)
+	
+	# Set font type and size
+        font = ImageFont.truetype('Minecraftia.ttf', 8)
+
+	# Position time
+	x_pos = 2
+	y_pos = 2 + 12 + 16/2 - 8/2
+        
+	# Draw time
+	draw.text((x_pos, y_pos), "IP: "+ipaddress, font=font, fill=255)
+
+	# Position date
+	y_pos = 2 + 12 + 16 + 16/2 - 8/2
+
+	# Draw date
+	draw.text((x_pos, y_pos), "NM: "+netmask, font=font, fill=255)
+
+	# Position date
+	y_pos = 2 + 12 + 16 + 16 + 16/2 - 8/2
+
+	# Draw date
+	draw.text((x_pos, y_pos), "GW: "+gateway, font=font, fill=255)
+	
+	# Draw the image buffer
+	disp.image(image)
+	disp.display()
 
 def string_width(fontType,string):
 	string_width = 0
