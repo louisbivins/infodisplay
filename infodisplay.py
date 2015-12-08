@@ -80,6 +80,7 @@ def string_width(fontType,string):
 
 	return string_width
 
+# Set up GPIO with internal pull-up
 GPIO.setmode(GPIO.BCM)	
 GPIO.setup(12, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(16, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -114,13 +115,15 @@ display = 0
 while True:
 	millis = int(round(time.time() * 1000))
 	if((millis - prev_millis) > 500):
-		if (not GPIO.input(12)):
+		# Cycle through different displays
+		if(not GPIO.input(12)):
 			display++
 			if(display > 2):
 				display = 0
 			prev_millis = int(round(time.time() * 1000))
-			
-		elif (not GPIO.input(16)):
+
+		# Trigger action based on current display
+		elif(not GPIO.input(16)):
 			if(display == 0):
 				# do something
 			elif(display == 1):
@@ -128,12 +131,12 @@ while True:
 			elif(display == 2):
 				# do something
 			prev_millis = int(round(time.time() * 1000))
-	
+
 	if(display == 0):
 		display_time()
 	elif(display == 1):
 		display_network()
 	elif(display == 2):
 		display_social()
-		
+
 	time.sleep(0.1)
