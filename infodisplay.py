@@ -41,10 +41,16 @@ def display_time():
 	disp.image(image)
 	disp.display()
 
-def display_socialmedia():
+def display_social():
 	# Collect current time and date
+	twitter = os.popen("curl https://twitter.com/f_vdbosch?lang=en | grep 'data-nav=\"followers\"' | grep -o '[0-9]\+'").read()
+	youtube = os.popen("curl https://www.youtube.com/c/FrederickVandenbosch | grep 'subscribers' | grep -o '[0-9]\+ subscribers' | grep -o '[0-9]\+'").read()
+	facebook = "0"
+	instagram = "0"
+	googleplus = "0"
+
 	channels = ["YouTube", "Twitter", "Facebook", "Instagram", "Google+"]
-	subscribers = [101, 229, 62, 23, 44]
+	subscribers = [youtube, twitter, facebook, instagram, googleplus]
 
 	# Clear image buffer by drawing a black filled box
 	draw.rectangle((0,0,width,height), outline=0, fill=0)
@@ -52,7 +58,7 @@ def display_socialmedia():
 	# Set font type and size
 	font = ImageFont.truetype('Minecraftia.ttf', 8)
 
-	for i in range(0, 4):
+	for i in range(0, 5):
 		# Position time
 		x_pos = 2
 		y_pos = 2 + (((disp.height-4)/5)*i)
@@ -72,10 +78,10 @@ def display_socialmedia():
 	disp.display()
 
 def display_network():
-	ipaddress = system.popen("ifconfig wlan0 | grep 'inet addr' | awk -F: '{print $2}' | awk '{print $1}'").read()
-	netmask = system.popen("ifconfig wlan0 | grep 'inet addr' | awk -F: '{print $2}' | awk '{print $1}'").read()
-	gateway = system.popen("ifconfig wlan0 | grep 'inet addr' | awk -F: '{print $2}' | awk '{print $1}'").read()
-	ssid = system.popen("iwconfig wlan0 | grep 'ESSID'").read()
+	ipaddress = os.popen("ifconfig wlan0 | grep 'inet addr' | awk -F: '{print $2}' | awk '{print $1}'").read()
+	netmask = os.popen("ifconfig wlan0 | grep 'Mask' | awk -F: '{print $4}'").read()
+	gateway = os.popen("route -n | grep '^0.0.0.0' | awk '{print $2}'").read()
+	ssid = os.popen("iwconfig wlan0 | grep 'ESSID' | awk '{print $4}' | awk -F\\\" '{print $2}'").read()
 
 	# Clear image buffer by drawing a black filled box
 	draw.rectangle((0,0,width,height), outline=0, fill=0)
@@ -94,20 +100,19 @@ def display_network():
         font = ImageFont.truetype('Minecraftia.ttf', 8)
 
 	# Position time
-	x_pos = 2
-	y_pos = 2 + 12 + 16/2 - 8/2
+	y_pos += 12 + 10 
         
 	# Draw time
 	draw.text((x_pos, y_pos), "IP: "+ipaddress, font=font, fill=255)
 
 	# Position date
-	y_pos = 2 + 12 + 16 + 16/2 - 8/2
+	y_pos += 10 
 
 	# Draw date
 	draw.text((x_pos, y_pos), "NM: "+netmask, font=font, fill=255)
 
 	# Position date
-	y_pos = 2 + 12 + 16 + 16 + 16/2 - 8/2
+	y_pos += 10
 
 	# Draw date
 	draw.text((x_pos, y_pos), "GW: "+gateway, font=font, fill=255)
@@ -155,6 +160,7 @@ font = ImageFont.load_default()
 draw = ImageDraw.Draw(image)
 
 prev_millis = 0
+prev_social = 0
 display = 0
 
 while True:
@@ -162,7 +168,7 @@ while True:
 	if((millis - prev_millis) > 500):
 		# Cycle through different displays
 		if(not GPIO.input(12)):
-			display++
+			display += 1
 			if(display > 2):
 				display = 0
 			prev_millis = int(round(time.time() * 1000))
@@ -171,10 +177,13 @@ while True:
 		elif(not GPIO.input(16)):
 			if(display == 0):
 				# do something
+				time.sleep(0.01)
 			elif(display == 1):
 				# do something
+				time.sleep(0.01)
 			elif(display == 2):
 				# do something
+				time.sleep(0.01)
 			prev_millis = int(round(time.time() * 1000))
 
 	if(display == 0):
@@ -182,6 +191,8 @@ while True:
 	elif(display == 1):
 		display_network()
 	elif(display == 2):
-		display_social()
+		if((millis - prev_social) > 60000):
+			display_social()
+			prev_social = millis
 
 	time.sleep(0.1)
