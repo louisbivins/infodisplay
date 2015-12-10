@@ -99,7 +99,7 @@ def display_network():
         x_pos = 2
 	y_pos = 2
 
-	# Draw date
+	# Draw SSID
 	draw.text((x_pos, y_pos), ssid, font=font, fill=255)
 	
 	# Set font type and size
@@ -108,19 +108,19 @@ def display_network():
 	# Position IP
 	y_pos += 12 + 10 
         
-	# Draw time
+	# Draw IP
 	draw.text((x_pos, y_pos), "IP: "+ipaddress, font=font, fill=255)
 
 	# Position NM
 	y_pos += 10 
 
-	# Draw date
+	# Draw NM
 	draw.text((x_pos, y_pos), "NM: "+netmask, font=font, fill=255)
 
 	# Position GW
 	y_pos += 10
 
-	# Draw date
+	# Draw GW
 	draw.text((x_pos, y_pos), "GW: "+gateway, font=font, fill=255)
 	
 	# Draw the image buffer
@@ -155,8 +155,7 @@ height = disp.height
 disp.clear()
 disp.display()
 
-# Create image buffer
-# Make sure to create image with mode '1' for 1-bit color
+# Create image buffer with mode '1' for 1-bit color
 image = Image.new('1', (width, height))
 
 # Load default font
@@ -172,6 +171,8 @@ time_format = True
 
 while True:
 	millis = int(round(time.time() * 1000))
+
+	# Software debouncing
 	if((millis - prev_millis) > 250):
 		# Cycle through different displays
 		if(not GPIO.input(12)):
