@@ -127,6 +127,27 @@ def display_network():
 	disp.image(image)
 	disp.display()
 
+def display_fetching():
+	# Text
+	text = "fetching data ..."
+	
+	# Clear image buffer by drawing a black filled box
+	draw.rectangle((0,0,width,height), outline=0, fill=0)
+
+	# Set font type and size
+        font = ImageFont.truetype('Minecraftia.ttf', 12)
+        
+        # Position SSID
+        x_pos = (height/2) - (12/2)
+	y_pos = (width/2) - (string_width(font,text)/2)
+
+	# Draw SSID
+	draw.text((x_pos, y_pos), text, font=font, fill=255)
+
+	# Draw the image buffer
+	disp.image(image)
+	disp.display()
+	
 def string_width(fontType,string):
 	string_width = 0
 
@@ -192,6 +213,7 @@ while True:
 				time.sleep(0.01)
 			elif(display == 2):
 				# Refresh social media now
+				display_fetching()
 				display_social()
 				time.sleep(0.01)
 			prev_millis = int(round(time.time() * 1000))
@@ -203,6 +225,7 @@ while True:
 	elif(display == 2):
 		# Only fetch social media data every 5 minutes when active
 		if((millis - prev_social) > 300000):
+			display_fetching()
 			display_social()
 			prev_social = millis
 
