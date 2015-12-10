@@ -49,7 +49,7 @@ def display_social():
 	twitter = os.popen("curl https://twitter.com/f_vdbosch?lang=en | grep 'data-nav=\"followers\"' | grep -o '[0-9]\+'").read()
 	youtube = os.popen("curl https://www.youtube.com/c/FrederickVandenbosch | grep 'subscribers' | grep -o '[0-9]\+ subscribers' | grep -o '[0-9]\+'").read()
 	facebook = "0"
-	instagram = "0"
+	instagram = os.popen("curl https://www.instagram.com/f_vdbosch/ | grep -o '\"followed_by\":{\"count\":[0-9]\+}' | grep -o '[0-9]\+'").read()
 	googleplus = "0"
 
 	# Put data in lists that can be iterated over
