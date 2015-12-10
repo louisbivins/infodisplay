@@ -47,7 +47,7 @@ def display_time():
 def display_social():
 	# Collect social media subscribers/followers/... by parsing webpages
 	twitter = os.popen("curl https://twitter.com/f_vdbosch?lang=en | grep 'data-nav=\"followers\"' | grep -o '[0-9]\+'").read()
-	youtube = os.popen("curl https://www.youtube.com/c/FrederickVandenbosch | grep 'subscribers' | grep -o '[0-9]\+ subscribers' | grep -o '[0-9]\+'").read()
+	youtube = os.popen("curl https://www.youtube.com/c/FrederickVandenbosch | grep -o '[0-9]\+ subscribers' | grep -o '[0-9]\+'").read()
 	facebook = "0"
 	instagram = os.popen("curl https://www.instagram.com/f_vdbosch/ | grep -o '\"followed_by\":{\"count\":[0-9]\+}' | grep -o '[0-9]\+'").read()
 	googleplus = "0"
