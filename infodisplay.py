@@ -127,19 +127,16 @@ def display_network():
 	disp.image(image)
 	disp.display()
 
-def display_fetching():
-	# Text
-	text = "fetching data ..."
-	
+def display_custom(text):
 	# Clear image buffer by drawing a black filled box
 	draw.rectangle((0,0,width,height), outline=0, fill=0)
 
 	# Set font type and size
-        font = ImageFont.truetype('Minecraftia.ttf', 12)
+        font = ImageFont.truetype('Minecraftia.ttf', 8)
         
         # Position SSID
-        x_pos = (height/2) - (12/2)
-	y_pos = (width/2) - (string_width(font,text)/2)
+        x_pos = (width/2) - (string_width(font,text)/2)
+	y_pos = (height/2) - (8/2)
 
 	# Draw SSID
 	draw.text((x_pos, y_pos), text, font=font, fill=255)
@@ -206,26 +203,30 @@ while True:
 		elif(not GPIO.input(16)):
 			if(display == 0):
 				# Toggle between 12/24h format
-				time_format = !time_format
+				time_format =  not time_format
 				time.sleep(0.01)
 			elif(display == 1):
 				# Reconnect to network
+				display_custom("reconnecting wifi ...")
+				os.popen("sudo ifdown wlan0; sleep 5; sudo ifup --force wlan0")
 				time.sleep(0.01)
 			elif(display == 2):
 				# Refresh social media now
-				display_fetching()
+				display_custom("fetching data ...")
 				display_social()
 				time.sleep(0.01)
 			prev_millis = int(round(time.time() * 1000))
 
 	if(display == 0):
 		display_time()
+		prev_social = 0
 	elif(display == 1):
 		display_network()
+		prev_social = 0
 	elif(display == 2):
 		# Only fetch social media data every 5 minutes when active
 		if((millis - prev_social) > 300000):
-			display_fetching()
+			display_custom("fetching data ...")
 			display_social()
 			prev_social = millis
 
