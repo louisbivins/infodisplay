@@ -46,13 +46,14 @@ def display_time():
 	disp.display()
 
 def display_social():
-	# Collect current time and date
+	# Collect social media subscribers/followers/... by parsing webpages
 	twitter = os.popen("curl https://twitter.com/f_vdbosch?lang=en | grep 'data-nav=\"followers\"' | grep -o '[0-9]\+'").read()
 	youtube = os.popen("curl https://www.youtube.com/c/FrederickVandenbosch | grep 'subscribers' | grep -o '[0-9]\+ subscribers' | grep -o '[0-9]\+'").read()
 	facebook = "0"
 	instagram = "0"
 	googleplus = "0"
 
+	# Put data in lists that can be iterated over
 	channels = ["YouTube", "Twitter", "Facebook", "Instagram", "Google+"]
 	subscribers = [youtube, twitter, facebook, instagram, googleplus]
 
@@ -62,19 +63,20 @@ def display_social():
 	# Set font type and size
 	font = ImageFont.truetype('Minecraftia.ttf', 8)
 
+	# Iterate over lists
 	for i in range(0, 5):
-		# Position time
+		# Position channel name
 		x_pos = 2
 		y_pos = 2 + (((disp.height-4)/5)*i)
 
-		# Draw time
+		# Draw channel name
 		draw.text((x_pos, y_pos), channels[i], font=font, fill=255)
 
-		# Position date
+		# Position subcribers/followers/...
 		x_pos = disp.width - 2 - string_width(font, subscribers[i])
 		y_pos = 2 + (((disp.height-4)/5)*i)
 
-		# Draw date
+		# Draw subcribers/followers/...
 		draw.text((x_pos, y_pos), subscribers[i], font=font, fill=255)
 
 	# Draw the image buffer
@@ -82,6 +84,7 @@ def display_social():
 	disp.display()
 
 def display_network():
+	# Collect network information by parsing command line outputs
 	ipaddress = os.popen("ifconfig wlan0 | grep 'inet addr' | awk -F: '{print $2}' | awk '{print $1}'").read()
 	netmask = os.popen("ifconfig wlan0 | grep 'Mask' | awk -F: '{print $4}'").read()
 	gateway = os.popen("route -n | grep '^0.0.0.0' | awk '{print $2}'").read()
@@ -93,7 +96,7 @@ def display_network():
 	# Set font type and size
         font = ImageFont.truetype('Minecraftia.ttf', 12)
         
-        # Position date
+        # Position SSID
         x_pos = 2
 	y_pos = 2
 
@@ -103,19 +106,19 @@ def display_network():
 	# Set font type and size
         font = ImageFont.truetype('Minecraftia.ttf', 8)
 
-	# Position time
+	# Position IP
 	y_pos += 12 + 10 
         
 	# Draw time
 	draw.text((x_pos, y_pos), "IP: "+ipaddress, font=font, fill=255)
 
-	# Position date
+	# Position NM
 	y_pos += 10 
 
 	# Draw date
 	draw.text((x_pos, y_pos), "NM: "+netmask, font=font, fill=255)
 
-	# Position date
+	# Position GW
 	y_pos += 10
 
 	# Draw date
