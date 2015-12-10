@@ -11,7 +11,11 @@ import os
 
 def display_time():
 	# Collect current time and date
-	current_time = time.strftime("%H:%M")
+	if(time_format):
+		current_time = time.strftime("%I:%M")
+	else:
+		current_time = time.strftime("%H:%M")
+		
 	current_date = time.strftime("%d/%m/%Y")
 
 	# Clear image buffer by drawing a black filled box
@@ -162,10 +166,11 @@ draw = ImageDraw.Draw(image)
 prev_millis = 0
 prev_social = 0
 display = 0
+time_format = True
 
 while True:
 	millis = int(round(time.time() * 1000))
-	if((millis - prev_millis) > 500):
+	if((millis - prev_millis) > 250):
 		# Cycle through different displays
 		if(not GPIO.input(12)):
 			display += 1
@@ -176,13 +181,15 @@ while True:
 		# Trigger action based on current display
 		elif(not GPIO.input(16)):
 			if(display == 0):
-				# do something
+				# Toggle between 12/24h format
+				time_format = !time_format
 				time.sleep(0.01)
 			elif(display == 1):
-				# do something
+				# Reconnect to network
 				time.sleep(0.01)
 			elif(display == 2):
-				# do something
+				# Refresh social media now
+				display_social()
 				time.sleep(0.01)
 			prev_millis = int(round(time.time() * 1000))
 
@@ -191,7 +198,8 @@ while True:
 	elif(display == 1):
 		display_network()
 	elif(display == 2):
-		if((millis - prev_social) > 60000):
+		# Only fetch social media data every 5 minutes when active
+		if((millis - prev_social) > 300000):
 			display_social()
 			prev_social = millis
 
