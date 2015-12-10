@@ -1,5 +1,4 @@
-# Copyright (c) 2015 Frederick Vandenbosch
-# Author: Frederick Vandenbosch
+#!/usr/bin/env python
 
 import time
 import Adafruit_SSD1306
