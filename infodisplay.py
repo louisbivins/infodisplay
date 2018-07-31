@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import time
-import Adafruit_SSD1306
+
 import RPi.GPIO as GPIO
 import Image
 import ImageFont
