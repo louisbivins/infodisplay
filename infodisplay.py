@@ -21,7 +21,7 @@ def display_time():
 	draw.rectangle((0,0,width,height), outline=0, fill=0)
 
 	# Set font type and size
-        font = ImageFont.truetype('Minecraftia.ttf', 35)
+        # font = ImageFont.truetype('Minecraftia.ttf', 35)
 
 	# Position time
 	x_pos = (disp.width/2)-(string_width(font,current_time)/2)
